@@ -1,0 +1,73 @@
+<!-- Tema Switcher (Opsiyonel) -->
+@if (showThemeSwitcher) {
+  <div class="theme-switcher">
+    <button
+      class="theme-btn"
+      [class.active]="themeMode === 'light'"
+      (click)="setThemeMode('light')"
+      aria-label="Light Theme"
+      title="Light Theme"
+    >
+      <span class="theme-icon">☀️</span>
+      <span class="theme-label">Light</span>
+    </button>
+    <button
+      class="theme-btn"
+      [class.active]="themeMode === 'dark'"
+      (click)="setThemeMode('dark')"
+      aria-label="Dark Theme"
+      title="Dark Theme"
+    >
+      <span class="theme-icon">🌙</span>
+      <span class="theme-label">Dark</span>
+    </button>
+    <button
+      class="theme-btn"
+      [class.active]="themeMode === 'system'"
+      (click)="setThemeMode('system')"
+      aria-label="System Theme"
+      title="System Theme"
+    >
+      <span class="theme-icon">💻</span>
+      <span class="theme-label">System</span>
+    </button>
+  </div>
+}
+
+<ul [class.treelist-dark]="currentTheme === 'dark'" [class.treelist-light]="currentTheme === 'light'">
+  @for (node of nodes; track node.id) {
+    <li class="treelist-item">
+      <div class="treelist-content">
+        @if (shouldShowToggle(node)) {
+          <button class="treelist-toggle" (click)="toggle(node)" [attr.aria-expanded]="node.expanded" aria-label="Toggle node">
+            {{ node.expanded ? '▼' : '▶' }}
+          </button>
+        } @else {
+          <span class="treelist-spacer"></span>
+        }
+        <input
+          type="checkbox"
+          [(ngModel)]="node.checked"
+          (ngModelChange)="onCheckboxChange(node)"
+          (click)="$event.stopPropagation()"
+          class="treelist-checkbox"
+          [id]="'checkbox-' + node.id"
+          [attr.aria-label]="'Select ' + node.name"
+        />
+        <span class="treelist-name" (click)="onNameClick(node)">{{node.name}}</span>
+      </div>
+      @if (node.children && node.children.length > 0 && node.expanded) {
+        <nlabs-tree-list
+          [nodes]="node.children"
+          [theme]="currentTheme"
+          [showThemeSwitcher]="false"
+          [expandOnSelect]="expandOnSelect"
+          [selectChildren]="selectChildren"
+          [nameClickAction]="nameClickAction"
+          [loadChildrenFn]="loadChildrenFn"
+          (selectedIdsChange)="emitSelectedIds()"
+        ></nlabs-tree-list>
+      }
+    </li>
+  }
+</ul>

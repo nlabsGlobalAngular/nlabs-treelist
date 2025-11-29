@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "nlabs-treelist": {
+      "projectType": "library",
+      "root": "projects/nlabs-treelist",
+      "sourceRoot": "projects/nlabs-treelist/src",
+      "prefix": "nlabs",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/nlabs-treelist/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/nlabs-treelist/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/nlabs-treelist/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
