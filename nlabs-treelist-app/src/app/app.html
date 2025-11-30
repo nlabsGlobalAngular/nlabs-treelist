@@ -1,0 +1,138 @@
+<div class="app-container">
+  <header class="app-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>{{ title }}</h1>
+        <p class="subtitle">Yeni Proje Oluştur</p>
+      </div>
+      <button class="theme-toggle-btn" (click)="toggleTheme()">
+        {{ theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode' }}
+      </button>
+    </div>
+  </header>
+
+  <div class="form-container">
+    <form (ngSubmit)="onSubmit()" #projeForm="ngForm">
+      <!-- Proje Bilgileri -->
+      <section class="form-section">
+        <h2>Proje Bilgileri</h2>
+
+        <div class="form-group">
+          <label for="projeAd">Proje Adı *</label>
+          <input
+            type="text"
+            id="projeAd"
+            name="projeAd"
+            [(ngModel)]="proje.ad"
+            required
+            class="form-input"
+            placeholder="Proje adını giriniz"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="baslangicTarihi">Başlangıç Tarihi *</label>
+            <input
+              type="date"
+              id="baslangicTarihi"
+              name="baslangicTarihi"
+              [(ngModel)]="proje.baslangicTarihi"
+              required
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                name="devamEdiyorMu"
+                [(ngModel)]="proje.devamEdiyorMu"
+                class="form-checkbox"
+              />
+              <span>Proje Devam Ediyor</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="!proje.devamEdiyorMu">
+          <label for="bitisTarihi">Bitiş Tarihi *</label>
+          <input
+            type="date"
+            id="bitisTarihi"
+            name="bitisTarihi"
+            [(ngModel)]="proje.bitisTarihi"
+            [required]="!proje.devamEdiyorMu"
+            class="form-input"
+          />
+        </div>
+      </section>
+
+      <!-- Organizasyonlar (Yan Yana) -->
+      <section class="form-section">
+        <h2>Organizasyon Seçimi</h2>
+        <p class="section-description">Projeden sorumlu ve projede çalışacak organizasyonları seçiniz</p>
+
+        <div class="treelist-grid">
+          <!-- Sorumlu Organizasyonlar - Basit Görsel Gösterimi -->
+          <div class="treelist-column">
+            <h3 class="column-title">Sorumlu Organizasyonlar (Basit)</h3>
+            <p class="column-description">Default gösterim - showImage=true ile görseller otomatik gösterilir</p>
+            <div class="treelist-wrapper">
+              <!-- showImage=true: Görseller otomatik gösterilir -->
+              <nlabs-tree-list
+                [nodes]="sorumluOrganizasyonNodes"
+                [theme]="theme"
+                [showThemeSwitcher]="false"
+                [showImage]="true"
+                [expandOnSelect]="true"
+                [selectChildren]="true"
+                [nameClickAction]="'toggle'"
+                (selectedIdsChange)="onSorumluOrganizasyonChange($event)"
+              ></nlabs-tree-list>
+            </div>
+            <div class="selected-count">
+              Seçili: {{ proje.sorumluOrganizasyonIds.length }} organizasyon
+            </div>
+          </div>
+
+          <!-- Çalışan Organizasyonlar - CRUD İşlemleri -->
+          <div class="treelist-column">
+            <h3 class="column-title">Çalışan Organizasyonlar (CRUD)</h3>
+            <p class="column-description">showActions=true ile Ekle/Düzenle/Sil işlemleri</p>
+            <div class="treelist-wrapper">
+              <!-- showActions=true: CRUD butonları gösterilir -->
+              <nlabs-tree-list
+                [nodes]="calisanOrganizasyonNodes"
+                [theme]="theme"
+                [showThemeSwitcher]="false"
+                [showImage]="true"
+                [showActions]="true"
+                [expandOnSelect]="false"
+                [selectChildren]="false"
+                [nameClickAction]="'toggle'"
+                [loadChildrenFn]="loadAltOrganizasyonlar"
+                (selectedIdsChange)="onCalisanOrganizasyonChange($event)"
+                (nodeAdd)="onNodeAdd($event)"
+                (nodeEdit)="onNodeEdit($event)"
+                (nodeDelete)="onNodeDelete($event)"
+              ></nlabs-tree-list>
+            </div>
+            <div class="selected-count">
+              Seçili: {{ proje.calisanOrganizasyonIds.length }} organizasyon
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary">İptal</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!projeForm.valid">
+          Projeyi Kaydet
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

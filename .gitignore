@@ -1,7 +1,7 @@
 # Node modules
-nlabs-treelist-app/node_modules/
-nlabs-treelist-app/.angular/
-nlabs-treelist-app/.vscode/
+node_modules/
+.angular/
+.vscode/
 
 TreeList/bin/
 TreeList/obj/
@@ -10,11 +10,7 @@ TreeList/obj/
 dist/
 build/
 
-# Angular build artifacts
-.angular/
-
 # IDE/editor files
-.vscode/
 .idea/
 
 # Logs
@@ -42,7 +38,6 @@ coverage/
 # Ignore local environment
 local.env
 
-# Test/demo applications
-nlabs-treelist-app/
+# Visual Studio
 .vs/
 *.sln
